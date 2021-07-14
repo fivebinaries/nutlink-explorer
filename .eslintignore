@@ -1,0 +1,6 @@
+lib
+node_modules
+.eslintrc.js
+jest.config.js
+babel.config.js
+.next
