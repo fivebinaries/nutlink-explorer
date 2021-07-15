@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from '.';
 import { OracleMetadata } from '../types';
-import { BASE_URL } from '../utils/api';
 
 interface Oracle {
   address: string;
@@ -29,7 +28,7 @@ export const fetchMetadata = createAsyncThunk<
 >('oracles/fetchMetadata', async (address: string, { getState }) => {
   const exists = getState().oracles.oracles.find(o => o.address === address);
   if (exists) return;
-  const response = await fetch(`${BASE_URL}/api/nutlink/oracle/${address}`);
+  const response = await fetch(`/api/nutlink/oracle/${address}`);
   const json = await response.json();
   return { address, metadata: json } as Oracle;
 });

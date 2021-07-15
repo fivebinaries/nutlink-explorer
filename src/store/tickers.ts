@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { AppDispatch, RootState } from '.';
 import { TickerList } from '../types';
-import { BASE_URL } from '../utils/api';
 import { fetchTickerDatapoints } from './datapoints';
 import { fetchMetadata } from './oracles';
 
@@ -25,7 +24,7 @@ export const fetchAllTickers = createAsyncThunk<
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 >('oracles/fetchAllTickers', async (_, thunkApi) => {
-  const response = await fetch(`${BASE_URL}/api/nutlink/all/tickers`);
+  const response = await fetch(`/api/nutlink/all/tickers`);
   const list = (await response.json()) as TickerList;
   list.forEach(t => {
     thunkApi.dispatch(fetchTickerDatapoints({ oracles: t.pools, ticker: t.name }));
