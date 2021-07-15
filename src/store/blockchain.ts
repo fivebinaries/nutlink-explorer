@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { LatestBlock } from '../types';
-import { BASE_URL } from '../utils/api';
 
 // Define a type for the slice state
 interface BlockchainState {
@@ -17,7 +16,7 @@ const initialState: BlockchainState = {
 export const fetchLatestBlock = createAsyncThunk<LatestBlock, undefined>(
   'blockchain/fetchLatestBlock',
   async () => {
-    const response = await fetch(`${BASE_URL}/api/blocks/latest`);
+    const response = await fetch(`/api/blocks/latest`);
     const block = (await response.json()) as LatestBlock;
     console.log('block', block);
     return block;
