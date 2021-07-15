@@ -10,7 +10,7 @@ const headers = {
 };
 const params = { count: 100, page: 1 };
 
-export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+export default async (_req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
     const allTickers: TickerList = [];
 

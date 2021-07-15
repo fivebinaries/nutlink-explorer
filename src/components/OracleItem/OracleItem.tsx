@@ -195,7 +195,11 @@ const OracleItem = ({ address, ticker, ...rest }: Props) => {
     e => e.oracleAddress === address,
   );
 
-  const age = blockchainHeight ? blockchainHeight - tickerData?.datapoints[0].block_height : null;
+  const validatedTickerData = filterInvalidDatapoints(tickerData?.datapoints).valid;
+  const age =
+    blockchainHeight && validatedTickerData.length > 0
+      ? blockchainHeight - validatedTickerData[0].block_height
+      : null;
 
   const perPage = ITEMS_PER_PAGE;
   const startIndex = (currentPage - 1) * perPage;
@@ -206,14 +210,14 @@ const OracleItem = ({ address, ticker, ...rest }: Props) => {
     [tickerData, startIndex, stopIndex],
   );
 
-  const validatedTickerData = useMemo(
+  const validatedSlicedTickerData = useMemo(
     () => filterInvalidDatapoints(slicedDatapoints),
     [slicedDatapoints],
   );
 
-  const validTickerData = validatedTickerData.valid;
-  const hasInvalidData = validatedTickerData.invalid.length > 0;
-  const hasValidData = validatedTickerData.valid.length > 0;
+  const validTickerData = validatedSlicedTickerData.valid;
+  const hasInvalidData = validatedSlicedTickerData.invalid.length > 0;
+  const hasValidData = validatedSlicedTickerData.valid.length > 0;
 
   const latestDatapoint: TickerDatapoint | undefined = validTickerData[0];
 
@@ -315,13 +319,15 @@ const OracleItem = ({ address, ticker, ...rest }: Props) => {
                 ))}
               </GridSmall>
             </Datapoints>
-            <PaginationWrapper>
-              <Pagination
-                currentPage={currentPage}
-                onPageSelected={onSetPage}
-                isOnLastPage={slicedDatapoints.length < perPage}
-              />
-            </PaginationWrapper>
+            {slicedDatapoints && (
+              <PaginationWrapper>
+                <Pagination
+                  currentPage={currentPage}
+                  onPageSelected={onSetPage}
+                  isOnLastPage={slicedDatapoints.length < perPage}
+                />
+              </PaginationWrapper>
+            )}
           </Section>
         </Expanded>
       )}

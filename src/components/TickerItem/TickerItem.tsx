@@ -41,7 +41,7 @@ const TickerName = styled.h4`
 
 const Value = styled.span`
   font-weight: bold;
-  color: ${props => props.theme.TYPE_DARK_GRAY};
+  color: ${props => props.theme.TYPE_DARK_GREY};
 `;
 
 const Footer = styled.div`

@@ -16,7 +16,7 @@ const IconWrapper = styled.div`
 
 const TooltipContent = styled.div`
   font-size: 12px;
-  color: ${props => props.theme.TYPE_LIGHT_GRAY};
+  color: ${props => props.theme.TYPE_LIGHT_GREY};
 `;
 
 interface Props extends TippyProps {

@@ -137,11 +137,7 @@ const TickerDetails = () => {
               <Section heading="Oracles">
                 <Grid>
                   {selectedTicker?.pools.map(pool => (
-                    <StyledOracleItem
-                      address={pool}
-                      ticker={tickerName}
-                      latestBlock={selectedTicker?.latest_block}
-                    ></StyledOracleItem>
+                    <StyledOracleItem address={pool} ticker={tickerName}></StyledOracleItem>
                   ))}
                 </Grid>
               </Section>
