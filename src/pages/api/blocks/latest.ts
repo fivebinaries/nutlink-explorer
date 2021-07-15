@@ -4,7 +4,7 @@ import { API_URL } from '../../../constants';
 import { handleError } from '../../../utils/api';
 import { LatestBlock } from '../../../types';
 
-export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+export default async (_req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   const url = `${API_URL}/blocks/latest`;
   try {
     const result = await axios.get<LatestBlock>(url, {

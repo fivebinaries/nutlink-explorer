@@ -31,3 +31,5 @@ export const colors = {
     BOX_SHADOW_BLACK_5: 'rgba(0, 0, 0, 0.05)',
   },
 };
+
+export type ThemeInterface = typeof colors.light;
