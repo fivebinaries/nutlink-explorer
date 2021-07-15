@@ -43,16 +43,17 @@ export const filterInvalidDatapoints = (
   };
 };
 
-export const calculateDatapointAvgValue = (datapoint: TickerDatapoint): string =>
-  datapoint.payload
+export const calculateDatapointAvgValue = (datapoint: TickerDatapoint): string | null => {
+  return datapoint.payload
     .reduce((accPayload, payload) => accPayload.plus(payload.value), new BigNumber(0))
     .div((datapoint.payload ?? []).length)
     .toFixed();
+};
 
 export const getTickerAvgValue = (
   tickerDatapoints: PoolsState['datapoints'][string],
   currentBlockHeight?: number | null,
-): string => {
+): string | null => {
   const oraclesData = tickerDatapoints ?? [];
   const poolAverages: string[] = [];
   let mostRecentOracle: PoolsState['datapoints'][string][number] | null = null;
@@ -76,7 +77,10 @@ export const getTickerAvgValue = (
       const age = currentBlockHeight ? currentBlockHeight - lastDatapoint.block_height : null;
       if (!age || age < 200) {
         // don't include pools with stale data (lagging 200+ blocks)
-        poolAverages.push(calculateDatapointAvgValue(lastDatapoint));
+        const avg = calculateDatapointAvgValue(lastDatapoint);
+        if (avg !== null) {
+          poolAverages.push(avg);
+        }
       }
     }
   });
@@ -85,9 +89,13 @@ export const getTickerAvgValue = (
     const valid = filterInvalidDatapoints(
       (mostRecentOracle as PoolsState['datapoints'][string][number]).datapoints,
     ).valid;
-    poolAverages.push(calculateDatapointAvgValue(valid[0]));
+    const avg = calculateDatapointAvgValue(valid[0]);
+    if (avg) {
+      poolAverages.push(avg);
+    }
   }
 
+  if (poolAverages.length === 0) return null;
   return poolAverages
     .reduce((acc, next) => acc.plus(next), new BigNumber(0))
     .div(poolAverages.length)

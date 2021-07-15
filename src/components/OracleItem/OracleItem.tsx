@@ -222,8 +222,8 @@ const OracleItem = ({ address, ticker, ...rest }: Props) => {
   const latestDatapoint: TickerDatapoint | undefined = validTickerData[0];
 
   //   avg value computed from alls sources within latest datapoint (one with highest block height)
-  const avgValue = tickerData?.datapoints[0]
-    ? calculateDatapointAvgValue(filterInvalidDatapoints(tickerData?.datapoints).valid[0])
+  const avgValue = validatedTickerData[0]
+    ? calculateDatapointAvgValue(validatedTickerData[0])
     : null;
 
   const onSetPage = (page: number) => {
