@@ -105,7 +105,7 @@ const TickerDetails = () => {
   const status = useAppSelector(s => s.tickers.status);
 
   return (
-    <Layout title="Home | Next.js + TypeScript Example">
+    <Layout title="Nutlink Explorer">
       <TickerPage>
         <TickerHeading>
           <Link href={'/'} passHref>

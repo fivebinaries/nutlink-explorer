@@ -1,4 +1,5 @@
 import React from 'react';
+import Skeleton from 'react-loading-skeleton';
 import styled from 'styled-components';
 import { useAppSelector } from '../../hooks';
 import { getTickerAvgValue } from '../../utils/data';
@@ -95,6 +96,7 @@ type Props = {
 
 const TickerItem = ({ ticker, pools, latestBlock, count, ...rest }: Props) => {
   const tickerDatapoints = useAppSelector(s => s.datapoints.datapoints[ticker]) ?? [];
+  const status = useAppSelector(s => s.datapoints.status);
   const blockchainHeight = useAppSelector(s => s.blockchain.latestBlock?.height);
   const tickerAvgValue = getTickerAvgValue(tickerDatapoints, blockchainHeight);
   const age = blockchainHeight ? blockchainHeight - latestBlock : null;
@@ -105,7 +107,11 @@ const TickerItem = ({ ticker, pools, latestBlock, count, ...rest }: Props) => {
           <TickerName>{ticker}</TickerName>
         </WrapperLink>
         <Value>
-          <FiatValue value={tickerAvgValue} isNumericString tickerName={ticker} />
+          {tickerDatapoints.length === 0 && <Skeleton width={100} />}
+          {tickerAvgValue && tickerDatapoints.length > 0 && (
+            <FiatValue value={tickerAvgValue} isNumericString tickerName={ticker} />
+          )}
+          {status === 'loaded' && !tickerAvgValue && <>N/A</>}
         </Value>
       </Thumb>
       <Content>
