@@ -301,7 +301,14 @@ const OracleItem = ({ address, ticker, ...rest }: Props) => {
                     <GridLabelFirst>Block Height</GridLabelFirst>
                     <SourceValueFirst>{d?.block_height}</SourceValueFirst>
                     <GridLabel>TxHash</GridLabel>
-                    <SourceValue>{d?.tx_hash}</SourceValue>
+                    <SourceValue>
+                      <Link
+                        href={`https://explorer.cardano.org/en/transaction?id=${d.tx_hash}`}
+                        passHref
+                      >
+                        {d.tx_hash}
+                      </Link>
+                    </SourceValue>
 
                     {d.payload.map(datapoint => (
                       <React.Fragment key={datapoint.source}>
