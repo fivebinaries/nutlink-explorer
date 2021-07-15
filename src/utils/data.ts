@@ -51,7 +51,7 @@ export const calculateDatapointAvgValue = (datapoint: TickerDatapoint): string =
 
 export const getTickerAvgValue = (
   tickerDatapoints: PoolsState['datapoints'][string],
-  currentBlockHeight?: number,
+  currentBlockHeight?: number | null,
 ): string => {
   const oraclesData = tickerDatapoints ?? [];
   const poolAverages: string[] = [];
