@@ -1,14 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { POOLS } from '../../../../config/main';
 import { TickerList } from '../../../../types';
-import { Blockfrost, handleError } from '../../../../utils/api';
+import { getClient, handleError } from '../../../../utils/api';
 
-export default async (_req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
+  const { network } = req.query;
+  const Blockfrost = getClient(network === 'testnet');
   try {
     const allTickers: TickerList = [];
 
     const t1 = new Date().getTime();
-    const promises = POOLS.map(pool =>
+    const promises = POOLS[network as 'testnet' | 'mainnet'].map(pool =>
       Blockfrost.nutlinkAddressTickersAll(pool.address).then(res => ({
         tickers: res,
         poolAddress: pool.address,

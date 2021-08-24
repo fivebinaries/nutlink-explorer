@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { AppDispatch, RootState } from '.';
 import { TickerList } from '../types';
+import { getParams } from '../utils/url';
 import { fetchTickerDatapoints } from './datapoints';
 import { fetchMetadata } from './oracles';
 
@@ -20,19 +21,21 @@ export const fetchAllTickers = createAsyncThunk<
   TickerList,
   undefined,
   {
+    state: RootState;
     dispatch: AppDispatch;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
->('oracles/fetchAllTickers', async (_, thunkApi) => {
-  const response = await fetch(`/api/nutlink/all/tickers`);
+>('oracles/fetchAllTickers', async (_, { dispatch, getState }) => {
+  const params = getParams({ testnet: getState().blockchain.network === 'testnet' });
+  const response = await fetch(`/api/nutlink/all/tickers?${params}`);
   const list = (await response.json()) as TickerList;
   list.forEach(t => {
-    thunkApi.dispatch(fetchTickerDatapoints({ oracles: t.pools, ticker: t.name }));
+    dispatch(fetchTickerDatapoints({ oracles: t.pools, ticker: t.name }));
   });
 
   const oraclesAddress = new Set(list.map(t => t.pools).flat());
   oraclesAddress.forEach(address => {
-    thunkApi.dispatch(fetchMetadata(address));
+    dispatch(fetchMetadata(address));
   });
   return list;
 });
@@ -40,7 +43,11 @@ export const fetchAllTickers = createAsyncThunk<
 export const tickersSlice = createSlice({
   name: 'tickers',
   initialState,
-  reducers: {},
+  reducers: {
+    triggerRefetch: state => {
+      state.status = 'idle';
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(fetchAllTickers.pending, state => {
@@ -67,4 +74,5 @@ export const selectTicker = (
 ): RootState['tickers']['tickers'][number] | undefined =>
   state.tickers.tickers.find(t => t.name === name);
 
+export const { triggerRefetch } = tickersSlice.actions;
 export default tickersSlice.reducer;
