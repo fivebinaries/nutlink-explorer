@@ -1,3 +1,4 @@
+.yarn/*
 !/.yarn/cache
 !/.yarn/plugins
 !/.yarn/releases

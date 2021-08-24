@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import type { RootState } from '.';
 import { OracleMetadata } from '../types';
+import { getParams } from '../utils/url';
 
 interface Oracle {
   address: string;
@@ -28,7 +29,8 @@ export const fetchMetadata = createAsyncThunk<
 >('oracles/fetchMetadata', async (address: string, { getState }) => {
   const exists = getState().oracles.oracles.find(o => o.address === address);
   if (exists) return;
-  const response = await fetch(`/api/nutlink/oracle/${address}`);
+  const params = getParams({ testnet: getState().blockchain.network === 'testnet' });
+  const response = await fetch(`/api/nutlink/oracle/${address}?${params}`);
   const json = await response.json();
   return { address, metadata: json } as Oracle;
 });

@@ -1,23 +1,19 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
-import { API_URL } from '../../../../constants';
-import { handleError } from '../../../../utils/api';
+import { getClient, handleError } from '../../../../utils/api';
 import { OracleMetadata } from '../../../../types';
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
-  const { address } = req.query;
+  const { address, network } = req.query;
+  const Blockfrost = getClient(network === 'testnet');
 
   try {
-    const results = await axios.get<OracleMetadata>(`${API_URL}/nutlink/${address}`, {
-      headers: {
-        project_id: process.env.BLOCKFROST_PROJECT_ID,
-      },
-    });
+    const results = await Blockfrost.nutlinkAddress(address as string);
 
-    let metadata = results.data.metadata;
+    let metadata = results.metadata;
     if (!metadata) {
       const metadataResults = await axios
-        .get<OracleMetadata['metadata']>(results.data.metadata_url, {
+        .get<OracleMetadata['metadata']>(results.metadata_url, {
           headers: {
             project_id: process.env.BLOCKFROST_PROJECT_ID,
           },
@@ -31,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
       }
     }
 
-    return res.send({ ...results.data, metadata });
+    return res.send({ ...results, metadata });
   } catch (error) {
     handleError(error, res);
   }

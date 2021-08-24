@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import type { AppDispatch } from '.';
+import type { AppDispatch, RootState } from '.';
 import { PoolTicker, TickerDatapoint } from '../types';
+import { getParams } from '../utils/url';
 
 // Define a type for the slice state
 export interface PoolsState {
@@ -21,10 +22,12 @@ const initialState: PoolsState = {
 
 export const fetchTickerDatapointsForPool = createAsyncThunk<
   PoolTicker,
-  { oracle: string; ticker: string; page?: number }
->('oracles/fetchTickerDatapoints', async ({ oracle, ticker, page }) => {
-  const params = new URLSearchParams({
-    page: page?.toString() ?? '1',
+  { oracle: string; ticker: string; page?: number },
+  { state: RootState }
+>('oracles/fetchTickerDatapoints', async ({ oracle, ticker, page }, { getState }) => {
+  const params = getParams({
+    testnet: getState().blockchain.network === 'testnet',
+    page: page,
   });
   const response = await fetch(`/api/nutlink/address/${oracle}/${ticker}?${params}`);
   const jsonRes = (await response.json()) as PoolTicker;

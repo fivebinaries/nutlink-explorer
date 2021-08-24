@@ -32,6 +32,7 @@ type Props = {
 const Layout = ({ children, title = 'This is the default title' }: Props) => {
   const dispatch = useAppDispatch();
   const { status } = useAppSelector(s => s.tickers);
+  // const network = useAppSelector(s => s.blockchain);
 
   useEffect(() => {
     if (status === 'idle') {

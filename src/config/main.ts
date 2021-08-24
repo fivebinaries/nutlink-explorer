@@ -1,12 +1,20 @@
-export const POOLS = [
-  {
-    address:
-      'addr1q85yx2w7ragn5sx6umgmtjpc3865s9sg59sz4rrh6f90kgwfwlzu3w8ttacqg89mkdgwshwnplj5c5n9f8dhp0h55q2q7qm63t',
-  },
-  {
-    address: 'addr1v8w6wfzljnzdrwq6patkas35pgjzc3xlggpz70kaldsetcsrw3ep4',
-  },
-];
+export const POOLS = {
+  mainnet: [
+    {
+      address:
+        'addr1q85yx2w7ragn5sx6umgmtjpc3865s9sg59sz4rrh6f90kgwfwlzu3w8ttacqg89mkdgwshwnplj5c5n9f8dhp0h55q2q7qm63t',
+    },
+    {
+      address: 'addr1v8w6wfzljnzdrwq6patkas35pgjzc3xlggpz70kaldsetcsrw3ep4',
+    },
+  ],
+  testnet: [
+    {
+      address:
+        'addr_test1qpktdfrey07xa2shqe8vjn6rl4mh4xmspccjw3mcvgu67xdk0tx7w22wsvj28pjnx4gygulgex4um9ke3hckwvk8tm9s66tglc',
+    },
+  ],
+};
 
 export const ITEMS_PER_PAGE = 100;
 
