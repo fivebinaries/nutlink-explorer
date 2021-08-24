@@ -222,8 +222,8 @@ const OracleItem = ({ address, ticker, ...rest }: Props) => {
   const latestDatapoint: TickerDatapoint | undefined = validTickerData[0];
 
   //   avg value computed from alls sources within latest datapoint (one with highest block height)
-  const avgValue = tickerData?.datapoints[0]
-    ? calculateDatapointAvgValue(filterInvalidDatapoints(tickerData?.datapoints).valid[0])
+  const avgValue = validatedTickerData[0]
+    ? calculateDatapointAvgValue(validatedTickerData[0])
     : null;
 
   const onSetPage = (page: number) => {
@@ -301,7 +301,14 @@ const OracleItem = ({ address, ticker, ...rest }: Props) => {
                     <GridLabelFirst>Block Height</GridLabelFirst>
                     <SourceValueFirst>{d?.block_height}</SourceValueFirst>
                     <GridLabel>TxHash</GridLabel>
-                    <SourceValue>{d?.tx_hash}</SourceValue>
+                    <SourceValue>
+                      <Link
+                        href={`https://explorer.cardano.org/en/transaction?id=${d.tx_hash}`}
+                        passHref
+                      >
+                        {d.tx_hash}
+                      </Link>
+                    </SourceValue>
 
                     {d.payload.map(datapoint => (
                       <React.Fragment key={datapoint.source}>

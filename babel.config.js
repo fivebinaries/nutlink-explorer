@@ -7,6 +7,7 @@ module.exports = api => {
             {
                 displayName: true,
                 preprocess: false,
+                ssr: true,
             },
         ],
     ];

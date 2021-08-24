@@ -49,7 +49,7 @@ const NavigationBar = () => (
       <NavigationItem passHref href="/">
         Tickers
       </NavigationItem>
-      <NavigationItem href="/oracles">Oracles</NavigationItem>
+      {/* <NavigationItem href="/oracles">Oracles</NavigationItem> */}
       <NavigationItem passHref href="https://nut.link/">
         Nutlink
       </NavigationItem>

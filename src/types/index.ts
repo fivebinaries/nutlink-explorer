@@ -1,3 +1,5 @@
+import { Responses } from '@blockfrost/blockfrost-js';
+
 export interface OracleMetadata {
   metadata_url: string;
   metadata_hash: string;
@@ -50,6 +52,4 @@ export type TickerList = {
   pools: string[];
 }[];
 
-export interface LatestBlock {
-  height: number;
-}
+export type LatestBlock = Responses['block_content'];

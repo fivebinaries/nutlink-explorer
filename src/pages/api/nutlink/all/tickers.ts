@@ -1,14 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import axios from 'axios';
-import { API_URL } from '../../../../constants';
 import { POOLS } from '../../../../config/main';
-import { PoolTickers, TickerList } from '../../../../types';
-import { handleError } from '../../../../utils/api';
-
-const headers = {
-  project_id: process.env.BLOCKFROST_PROJECT_ID,
-};
-const params = { count: 100, page: 1 };
+import { TickerList } from '../../../../types';
+import { Blockfrost, handleError } from '../../../../utils/api';
 
 export default async (_req: NextApiRequest, res: NextApiResponse): Promise<void> => {
   try {
@@ -16,15 +9,10 @@ export default async (_req: NextApiRequest, res: NextApiResponse): Promise<void>
 
     const t1 = new Date().getTime();
     const promises = POOLS.map(pool =>
-      axios
-        .get<PoolTickers>(`${API_URL}/nutlink/${pool.address}/tickers`, {
-          headers,
-          params,
-        })
-        .then(res => ({
-          tickers: res.data,
-          poolAddress: pool.address,
-        })),
+      Blockfrost.nutlinkAddressTickersAll(pool.address).then(res => ({
+        tickers: res,
+        poolAddress: pool.address,
+      })),
     );
 
     // Retrieve all ticker symbols
