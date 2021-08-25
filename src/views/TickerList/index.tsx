@@ -57,7 +57,7 @@ const TickerList = () => {
   const network = useAppSelector(s => s.blockchain.network);
 
   return (
-    <Layout title={`Nutlink Explorer ({network})`}>
+    <Layout title={`Nutlink Explorer (${network})`}>
       <StyledCard
         heading={
           <HeadingWrapper>
