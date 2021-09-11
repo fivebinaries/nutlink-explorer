@@ -73,7 +73,7 @@ const TickerList = () => {
                 }}
               >
                 <option value="mainnet">mainnet</option>
-                <option value="testnet">tesnet</option>
+                <option value="testnet">testnet</option>
               </select>
             </NetworkSwitchWrapper>
           </HeadingWrapper>
