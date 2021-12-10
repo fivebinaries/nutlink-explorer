@@ -13,11 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
     let metadata = results.metadata;
     if (!metadata) {
       const metadataResults = await axios
-        .get<OracleMetadata['metadata']>(results.metadata_url, {
-          headers: {
-            project_id: process.env.BLOCKFROST_PROJECT_ID,
-          },
-        })
+        .get<OracleMetadata['metadata']>(results.metadata_url)
         .catch(() => {
           console.log('failed pool metadata fetch for ', address);
           return null;
