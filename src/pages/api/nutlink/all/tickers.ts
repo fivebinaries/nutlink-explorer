@@ -11,14 +11,24 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<void> 
 
     const t1 = new Date().getTime();
     const promises = POOLS[network as 'testnet' | 'mainnet'].map(pool =>
-      Blockfrost.nutlinkAddressTickersAll(pool.address).then(res => ({
-        tickers: res,
-        poolAddress: pool.address,
-      })),
+      Blockfrost.nutlinkAddressTickersAll(pool.address)
+        .then(res => ({
+          tickers: res,
+          poolAddress: pool.address,
+        }))
+        .catch(error => {
+          console.log(`Skipping pool ${pool.address}. Error occurred.`);
+          console.error(error);
+          return {
+            tickers: [],
+            poolAddress: pool.address,
+          };
+        }),
     );
 
     // Retrieve all ticker symbols
     const results = await Promise.all(promises);
+
     console.log('fetch of tickers took: ', (new Date().getTime() - t1) / 1000);
 
     results.forEach(pool =>
